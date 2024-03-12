@@ -7,3 +7,5 @@ BG_COLOR = (33, 166, 69)
 BG_LINE_COLOR = (255, 255, 255)
 # Настройки игрока
 SPEEED_PLAYER = 15
+# Настройки мяча
+SPEEED_BALL = 8
