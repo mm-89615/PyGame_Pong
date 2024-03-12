@@ -10,10 +10,14 @@ class Scoreboard:
         """ Инициализация таблицы результатов """
         self.screen = game_screen.screen
         # Добавление шрифта
+
         self.font = pygame.font.Font('fonts/KodeMono.ttf', FONS_SIZE_SCORE)
         # Подсчет голов
         self.player1_goals = 0
         self.player2_goals = 0
+
+
+
 
     def draw_scoreboard(self):
         """ Отрисовка счета игроков """

@@ -106,7 +106,6 @@ class Game:
     def goal_handing(self):
         """ Обработка гола """
         # Возвращение в центр
-
         self.ball.ball_on_center()
         self.ball.random_start()
         # pygame.time.delay(1000)
