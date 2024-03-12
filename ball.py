@@ -19,7 +19,8 @@ class Ball(Sprite):
         self.rect = self.image.get_rect()
         self.ball_on_center()
         # Случайное направление движения мяча при старте
-        self.random_start()
+        self.direction_x = random.choice([1, -1])
+        self.direction_y = random.choice([1, -1])
 
     def update(self):
         """ Обновление позиции мяча """
@@ -29,7 +30,6 @@ class Ball(Sprite):
         # Отслеживание столкновений сверху и снизу
         if self.rect.top <= 0 or self.rect.bottom >= SCREEN_HEIGHT:
             self.change_direction_y()
-
 
     def blit(self):
         """ Отрисовка мяча """
