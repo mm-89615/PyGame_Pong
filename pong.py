@@ -38,8 +38,18 @@ class Game:
             # Обработка событий на экране
             self.check_events()
 
+    def check_collisions(self):
+        """ Отслеживание столкновение мяча с игроками и смена направления"""
+        # Столкновение с первым игроком
+        if pygame.Rect.colliderect(self.ball.rect, self.player1.rect):
+            self.ball.change_direction_x()
+        # Столкновение со вторым игрком
+        if pygame.Rect.colliderect(self.ball.rect, self.player2.rect):
+            self.ball.change_direction_x()
+
     def update_screen(self):
         """ Обновление изображений на экране """
+        self.check_collisions()
         pygame.display.flip()
         self.draw_on_screen()
         self.clock.tick(FPS)

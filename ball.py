@@ -23,14 +23,13 @@ class Ball(Sprite):
 
     def update(self):
         """ Обновление позиции мяча """
+        # Движение мяча по Х и Y
         self.rect.x += SPEEED_BALL * self.direction_x
         self.rect.y += SPEEED_BALL * self.direction_y
         # Отслеживание столкновений сверху и снизу
         if self.rect.top <= 0 or self.rect.bottom >= SCREEN_HEIGHT:
             self.change_direction_y()
-        # Отслеживание столкновений справа и слева
-        if self.rect.left <= 0 or self.rect.right >= SCREEN_WIDTH:
-            self.change_direction_x()
+
 
     def blit(self):
         """ Отрисовка мяча """
