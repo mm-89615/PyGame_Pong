@@ -36,9 +36,12 @@ class Game:
         # Обратный отсчет при голе
         self.countdown = pygame.USEREVENT + 1
         self.counter = 3
-        self.timer_font = pygame.font.Font('fonts/KodeMono.ttf', FONS_SIZE_GOAL_TIMER)
-        self.timer_text = self.timer_font.render(f"{self.counter}", True, TIMER_COLOR)
-        self.timer_rect = self.timer_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+        self.timer_font = pygame.font.Font('fonts/KodeMono.ttf',
+                                           FONS_SIZE_GOAL_TIMER)
+        self.timer_text = self.timer_font.render(f"{self.counter}", True,
+                                                 TIMER_COLOR)
+        self.timer_rect = self.timer_text.get_rect(
+            center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
 
     def game_running(self):
         """ Запуск основного цикла игры """
@@ -72,7 +75,8 @@ class Game:
         """ Отрисовка объектов на экране """
         # Прорисовка игрового поля
         self.screen.fill(BG_COLOR)
-        pygame.draw.line(self.screen, BG_LINE_COLOR, (SCREEN_WIDTH / 2, 0), (SCREEN_WIDTH / 2, SCREEN_HEIGHT))
+        pygame.draw.line(self.screen, BG_LINE_COLOR, (SCREEN_WIDTH / 2, 0),
+                         (SCREEN_WIDTH / 2, SCREEN_HEIGHT))
         # Прорисовка игроков
         self.player1.blit()
         self.player2.blit()
@@ -82,7 +86,8 @@ class Game:
         self.ball.blit()
         # Отрисовка таймера если забит гол
         if self.is_goal:
-            self.timer_text = self.timer_font.render(f"{self.counter}", True, TIMER_COLOR)
+            self.timer_text = self.timer_font.render(f"{self.counter}", True,
+                                                     TIMER_COLOR)
             self.screen.blit(self.timer_text, self.timer_rect)
 
     def check_events(self):
@@ -113,11 +118,67 @@ class Game:
     def check_collisions(self):
         """ Отслеживание столкновение мяча с игроками и смена направления"""
         # Столкновение с первым игроком
-        if pygame.Rect.colliderect(self.ball.rect, self.player1.rect):
-            self.ball.change_direction_x()
+        # Движение мяча ВЕРХ ЛЕВО
+        if (self.ball.direction_x, self.ball.direction_y) == \
+                self.ball.direction['UP_LEFT']:
+            # Столкновение мяча с платформой справа
+            if pygame.Rect.colliderect(self.ball.rect, self.player1.rect) and (
+                    (self.ball.rect.centery <= self.player1.rect.bottom) and (
+                    self.ball.rect.left <= self.player1.rect.right)):
+                self.ball.direction_x, self.ball.direction_y = \
+                    self.ball.direction['UP_RIGHT']
+            # Столкновение мяча с платформой снизу
+            if pygame.Rect.colliderect(self.ball.rect, self.player1.rect) and (
+                    (self.ball.rect.centerx <= self.player1.rect.right) and (
+                    self.ball.rect.top <= self.player1.rect.bottom)):
+                self.ball.direction_x, self.ball.direction_y = \
+                    self.ball.direction['DOWN_LEFT']
+        # Движение мяча ВНИЗ ЛЕВО
+        elif (self.ball.direction_x, self.ball.direction_y) == \
+                self.ball.direction['DOWN_LEFT']:
+            # Столкновение мяча с платформой справа
+            if pygame.Rect.colliderect(self.ball.rect, self.player1.rect) and (
+                    (self.ball.rect.centery >= self.player1.rect.top) and (
+                    self.ball.rect.left <= self.player1.rect.right)):
+                self.ball.direction_x, self.ball.direction_y = \
+                    self.ball.direction['DOWN_RIGHT']
+            # Столкновение мяча с платформой сверху
+            if pygame.Rect.colliderect(self.ball.rect, self.player1.rect) and (
+                    (self.ball.rect.centerx <= self.player1.rect.right) and (
+                    self.ball.rect.bottom >= self.player1.rect.top)):
+                self.ball.direction_x, self.ball.direction_y = \
+                    self.ball.direction['UP_LEFT']
         # Столкновение со вторым игроком
-        if pygame.Rect.colliderect(self.ball.rect, self.player2.rect):
-            self.ball.change_direction_x()
+        # Движение мяча ВЕРХ ПРАВО
+        if (self.ball.direction_x, self.ball.direction_y) == \
+                self.ball.direction['UP_RIGHT']:
+            # Столкновение мяча с платформой слева
+            if pygame.Rect.colliderect(self.ball.rect, self.player2.rect) and (
+                    (self.ball.rect.centery <= self.player2.rect.bottom) and (
+                    self.ball.rect.right >= self.player2.rect.left)):
+                self.ball.direction_x, self.ball.direction_y = \
+                    self.ball.direction['UP_LEFT']
+            # Столкновение мяча с платформой снизу
+            if pygame.Rect.colliderect(self.ball.rect, self.player2.rect) and (
+                    (self.ball.rect.centerx >= self.player2.rect.left) and (
+                    self.ball.rect.top <= self.player2.rect.bottom)):
+                self.ball.direction_x, self.ball.direction_y = \
+                    self.ball.direction['DOWN_RIGHT']
+        # Движение мяча ВНИЗ ПРАВО
+        elif (self.ball.direction_x, self.ball.direction_y) == \
+                self.ball.direction['DOWN_RIGHT']:
+            # Столкновение мяча с платформой слева
+            if pygame.Rect.colliderect(self.ball.rect, self.player2.rect) and (
+                    (self.ball.rect.centery >= self.player2.rect.top) and (
+                    self.ball.rect.right >= self.player2.rect.left)):
+                self.ball.direction_x, self.ball.direction_y = \
+                    self.ball.direction['DOWN_LEFT']
+            # Столкновение мяча с платформой сверху
+            if pygame.Rect.colliderect(self.ball.rect, self.player2.rect) and (
+                    (self.ball.rect.centerx >= self.player2.rect.left) and (
+                    self.ball.rect.bottom >= self.player2.rect.top)):
+                self.ball.direction_x, self.ball.direction_y = \
+                    self.ball.direction['UP_RIGHT']
 
     def check_goal(self):
         """ Проверка ушел ли мяч за края """

@@ -1,6 +1,6 @@
 # Настройки игрового окна
 SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 900
+SCREEN_HEIGHT = 800
 FPS = 60
 # Размер шрифта
 FONS_SIZE_SCORE = 45
@@ -18,9 +18,9 @@ BG_PAUSE_ALPHA = 200
 # Размер шрифта в меню
 FONS_SIZE_PAUSE_MENU = 150
 # Цвет шрифта при паузе
-MENU_TEXT_COLOR = (0,0,0)
+MENU_TEXT_COLOR = (0, 0, 0)
 
 # Настройки игрока
-SPEEED_PLAYER = 15
+SPEEED_PLAYER = 10
 # Настройки мяча
-SPEEED_BALL = 5
+SPEEED_BALL = 6

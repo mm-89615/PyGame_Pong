@@ -21,6 +21,13 @@ class Ball(Sprite):
         # Случайное направление движения мяча при старте
         self.direction_x = random.choice([1, -1])
         self.direction_y = random.choice([1, -1])
+        # Направления движений мяча
+        self.direction = {
+            'UP_LEFT': (-1, -1),
+            'UP_RIGHT': (1, -1),
+            'DOWN_LEFT': (-1, 1),
+            'DOWN_RIGHT': (1, 1),
+        }
 
     def update(self):
         """ Обновление позиции мяча """
@@ -38,10 +45,6 @@ class Ball(Sprite):
     def ball_on_center(self):
         """ Координаты центра для мяча """
         self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-
-    def change_direction_x(self):
-        """ Смена направления по Х при ударе """
-        self.direction_x *= -1
 
     def change_direction_y(self):
         """ Смена направления по Y при ударе """
