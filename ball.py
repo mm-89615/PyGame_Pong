@@ -15,7 +15,7 @@ class Ball(Sprite):
         super().__init__()
         self.screen = game_screen.screen
         # Загрузка изображения мяча и размещение в центре
-        self.image = pygame.image.load('images/ball2.png')
+        self.image = pygame.image.load('images/ball2.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.ball_on_center()
         # Случайное направление движения мяча при старте

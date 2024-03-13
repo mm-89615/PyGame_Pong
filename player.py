@@ -14,11 +14,11 @@ class Player(Sprite):
         self.player = player
         # Загрузка изображений игроков и размещение на своих местах
         if self.player == 1:
-            self.image = pygame.image.load('images/player1.png')
+            self.image = pygame.image.load('images/player1.png').convert_alpha()
             self.rect = self.image.get_rect()
             self.center_platform()
         if self.player == 2:
-            self.image = pygame.image.load('images/player2.png')
+            self.image = pygame.image.load('images/player2.png').convert_alpha()
             self.rect = self.image.get_rect()
             self.center_platform()
 
