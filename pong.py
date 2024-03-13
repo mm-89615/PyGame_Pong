@@ -14,16 +14,12 @@ class Game:
         pygame.init()
         # Настройки игрового окна и FPS
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.clock = pygame.time.Clock()
         pygame.display.set_caption('Pong')
         self.icon = pygame.image.load('images/icon.png')
         pygame.display.set_icon(self.icon)
-        self.clock = pygame.time.Clock()
         # Шрифт
         self.font = pygame.font.Font('fonts/KodeMono.ttf', FONS_SIZE_SCORE)
-        # Основной цикл игры
-        self.running = True
-        # Проверка на гол
-        self.is_goal = False
         # Создание игрока
         self.player1 = Player(player=1, game_screen=self)
         self.player2 = Player(player=2, game_screen=self)
@@ -31,6 +27,16 @@ class Game:
         self.ball = Ball(game_screen=self)
         # Создание счета игроков
         self.score = Scoreboard(game_screen=self)
+        # Основной цикл игры
+        self.running = True
+        # Проверка на гол
+        self.is_goal = False
+        # Обратный отсчет при голе
+        self.countdown = pygame.USEREVENT + 1
+        self.counter = 3
+        self.font = pygame.font.Font('fonts/KodeMono.ttf', FONS_SIZE_GOAL_TIMER)
+        self.timer = self.font.render(f"{self.counter}", True, TIMER_COLOR)
+        self.timer_rect = self.timer.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
 
     def game_running(self):
         """ Запуск основного цикла игры """
@@ -47,12 +53,13 @@ class Game:
         # Обновление игроков
         self.player1.update()
         self.player2.update()
-        # Обновление мяча
-        self.ball.update()
+        # Обновление мяча если нет гола
+        if not self.is_goal:
+            self.ball.update()
         # Обновление экрана
-        pygame.display.flip()
         self.draw_on_screen()
         self.clock.tick(FPS)
+        pygame.display.flip()
 
     def draw_on_screen(self):
         """ Отрисовка объектов на экране """
@@ -66,6 +73,10 @@ class Game:
         self.score.draw_scoreboard()
         # Прорисовка мяча
         self.ball.blit()
+        # Отрисовка таймера если забит гол
+        if self.is_goal:
+            self.timer = self.font.render(f"{self.counter}", True, TIMER_COLOR)
+            self.screen.blit(self.timer, self.timer_rect)
 
     def check_events(self):
         """ Обработка происходящих событий """
@@ -75,6 +86,12 @@ class Game:
         self.check_goal()
         # Проверка событий игры
         for event in pygame.event.get():
+            # Обратный отсчет на экране
+            if event.type == self.countdown:
+                self.counter -= 1
+                if self.counter == 0:
+                    pygame.time.set_timer(self.countdown, 0)
+                    self.is_goal = False
             # Событие закрытия игры
             if event.type == pygame.QUIT:
                 self.running = False
@@ -95,12 +112,11 @@ class Game:
         if self.ball.rect.right < 10:
             self.score.player2_goals += 1
             self.is_goal = True
+            self.goal_handing()
         # Гол второму игроку
         if self.ball.rect.left > SCREEN_WIDTH + 10:
             self.score.player1_goals += 1
             self.is_goal = True
-        # Обработка гола
-        if self.is_goal:
             self.goal_handing()
 
     def goal_handing(self):
@@ -108,8 +124,9 @@ class Game:
         # Возвращение в центр
         self.ball.ball_on_center()
         self.ball.random_start()
-        # pygame.time.delay(1000)
-        self.is_goal = False
+        # Запуск обратного отсчета
+        self.counter = 3
+        pygame.time.set_timer(self.countdown, 1000)
 
 
 if __name__ == "__main__":
